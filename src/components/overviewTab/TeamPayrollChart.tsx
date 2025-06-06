@@ -13,11 +13,17 @@ import {
 } from "recharts";
 import { formatMoney } from "../../utils/formatters";
 import { getTeamLogo } from "@/utils/teamColors";
+import { ProcessedMLBData } from "@/types/mlb";
+
+interface TeamPayrollChartProps {
+  yearlyData: { [year: number]: ProcessedMLBData[] };
+  availableYears: number[];
+}
 
 // Custom tooltip component with team logo
-const CustomTooltip = ({ active, payload, label, chartData }) => {
+const CustomTooltip = ({ active, payload, label, chartData }: any) => {
   if (active && payload && payload.length) {
-    const team = chartData.find((item) => item.Team === label);
+    const team = chartData.find((item: any) => item.Team === label);
 
     return (
       <div className="custom-tooltip bg-white p-3 border border-gray-200 shadow-sm rounded">
@@ -41,13 +47,16 @@ const CustomTooltip = ({ active, payload, label, chartData }) => {
   return null;
 };
 
-const TeamPayrollChart = ({ yearlyData, availableYears }) => {
+const TeamPayrollChart: React.FC<TeamPayrollChartProps> = ({
+  yearlyData,
+  availableYears,
+}) => {
   // Add local year state with default to latest year
-  const [selectedYear, setSelectedYear] = useState(
+  const [selectedYear, setSelectedYear] = useState<number>(
     availableYears[availableYears.length - 1]
   );
 
-  const data = yearlyData[selectedYear] || [];
+  const data: ProcessedMLBData[] = yearlyData[selectedYear] || [];
   const sortedData = [...data].sort(
     (a, b) => b["Total Payroll Allocation"] - a["Total Payroll Allocation"]
   );
