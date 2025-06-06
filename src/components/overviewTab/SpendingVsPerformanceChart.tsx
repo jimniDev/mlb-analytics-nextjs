@@ -14,51 +14,63 @@ import {
   ResponsiveContainer,
 } from "recharts";
 import { getTeamLogo } from "@/utils/teamColors";
+import { ProcessedMLBData } from "@/types/mlb";
 
-const SpendingVsPerformanceChart = ({ yearlyData, availableYears }) => {
+interface SpendingVsPerformanceChartProps {
+  yearlyData: { [year: number]: ProcessedMLBData[] };
+  availableYears: number[];
+}
+
+const SpendingVsPerformanceChart: React.FC<SpendingVsPerformanceChartProps> = ({
+  yearlyData,
+  availableYears,
+}) => {
   // Add local year state
-  const [selectedYear, setSelectedYear] = useState(
+  const [selectedYear, setSelectedYear] = useState<number>(
     availableYears[availableYears.length - 1]
   );
 
-  const data = yearlyData[selectedYear] || [];
+  const data: ProcessedMLBData[] = yearlyData[selectedYear] || [];
 
   // Colors based on the Sankey diagram
-  const performanceCategories = {
-    worldSeries: { name: "Won World Series", color: "#9C755E" },
-    wonLeague: { name: "Won League", color: "#B079A1" },
-    divisionWinner: { name: "Division Winner", color: "#58A14E" },
-    wildcard: { name: "Wildcard", color: "#76B6B2" },
-    noPlayoffs: { name: "No Playoffs", color: "#E15759" },
-  };
+  const performanceCategories: Record<string, { name: string; color: string }> =
+    {
+      worldSeries: { name: "Won World Series", color: "#9C755E" },
+      wonLeague: { name: "Won League", color: "#B079A1" },
+      divisionWinner: { name: "Division Winner", color: "#58A14E" },
+      wildcard: { name: "Wildcard", color: "#76B6B2" },
+      noPlayoffs: { name: "No Playoffs", color: "#E15759" },
+    };
 
   // Process the data to determine the correct categories
   const processedData = data.map((team) => {
     // Determine the correct playoff category based on available fields
     let category = "noPlayoffs";
 
-    if (team["Won World Series (Yes/No)"] === "Y") {
+    if ((team as any)["Won World Series (Yes/No)"] === "Y") {
       category = "worldSeries";
-    } else if (team["Won League (Yes/No)"] === "Y") {
+    } else if ((team as any)["Won League (Yes/No)"] === "Y") {
       category = "wonLeague";
-    } else if (team["Made Postseason"]) {
+    } else if ((team as any)["Made Postseason"]) {
       // For teams that made the playoffs but didn't win the league/WS,
       // we need to determine if they were division winners or wildcards
 
       // If the specific fields exist, use them
-      if (team["Division Winner (Yes/No)"] === "Y") {
+      if ((team as any)["Division Winner (Yes/No)"] === "Y") {
         category = "divisionWinner";
-      } else if (team["Wildcard (Yes/No)"] === "Y") {
+      } else if ((team as any)["Wildcard (Yes/No)"] === "Y") {
         category = "wildcard";
       } else {
         // If these specific fields don't exist, we need to infer from other data
         // Division winners typically have the highest win count in their division
         // This is a simple inference that may need refinement
-        const teamDivision = team["Divison"];
+        const teamDivision = (team as any)["Divison"];
         const isHighestInDivision = data
-          .filter((t) => t["Divison"] === teamDivision)
+          .filter((t) => (t as any)["Divison"] === teamDivision)
           .every(
-            (t) => t["Team"] === team["Team"] || t["Wins"] <= team["Wins"]
+            (t) =>
+              (t as any)["Team"] === (team as any)["Team"] ||
+              (t as any)["Wins"] <= (team as any)["Wins"]
           );
 
         if (isHighestInDivision) {
@@ -76,7 +88,7 @@ const SpendingVsPerformanceChart = ({ yearlyData, availableYears }) => {
   });
 
   // Custom tooltip component
-  const CustomTooltip = ({ active, payload }) => {
+  const CustomTooltip = ({ active, payload }: any) => {
     if (active && payload && payload.length) {
       const team = payload[0].payload;
 

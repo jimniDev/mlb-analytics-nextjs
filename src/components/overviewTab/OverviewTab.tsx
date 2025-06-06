@@ -8,8 +8,13 @@ import SpendingVsPerformanceChart from "./SpendingVsPerformanceChart";
 import TableauViz from "../common/TableauViz";
 import _ from "lodash";
 import BaseballFieldDiagram from "./BaseballFieldDiagram";
+import { YearlyData } from "@/types/mlb";
 
-const OverviewTab = ({ yearlyData }) => {
+interface OverviewTabProps {
+  yearlyData: YearlyData;
+}
+
+const OverviewTab: React.FC<OverviewTabProps> = ({ yearlyData }) => {
   // Get available years for filters
   const availableYears = Object.keys(yearlyData)
     .map((year) => parseInt(year))

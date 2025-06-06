@@ -3,7 +3,21 @@
 import React from "react";
 import { PieChart, Pie, Cell, Tooltip, ResponsiveContainer } from "recharts";
 
-const LeagueSpendingChart = ({ data, totalSpending }) => {
+interface LeagueSpendingData {
+  name: string;
+  value: number;
+  color: string;
+}
+
+interface LeagueSpendingChartProps {
+  data: LeagueSpendingData[];
+  totalSpending: number;
+}
+
+const LeagueSpendingChart: React.FC<LeagueSpendingChartProps> = ({
+  data,
+  totalSpending,
+}) => {
   return (
     <div className="bg-white p-4 rounded shadow-sm">
       <h3 className="text-lg font-medium mb-3 text-gray-700">
@@ -22,7 +36,7 @@ const LeagueSpendingChart = ({ data, totalSpending }) => {
               dataKey="value"
               nameKey="name"
               label={({ name, value, percent }) =>
-                `${name}: $${Math.round(value).toLocaleString()}M (${(
+                `${name}: $${Math.round(value as number).toLocaleString()}M (${(
                   percent * 100
                 ).toFixed(0)}%)`
               }
@@ -32,7 +46,9 @@ const LeagueSpendingChart = ({ data, totalSpending }) => {
               ))}
             </Pie>
             <Tooltip
-              formatter={(value) => `$${Math.round(value).toLocaleString()}M`}
+              formatter={(value) =>
+                `$${Math.round(value as number).toLocaleString()}M`
+              }
               contentStyle={{ backgroundColor: "#fff", borderColor: "#ddd" }}
             />
           </PieChart>

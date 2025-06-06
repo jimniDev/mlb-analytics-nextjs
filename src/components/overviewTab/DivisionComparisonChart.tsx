@@ -12,7 +12,19 @@ import {
   ResponsiveContainer,
 } from "recharts";
 
-const DivisionComparisonChart = ({ data }) => {
+interface DivisionData {
+  division: string;
+  avgPayroll: number;
+  avgWins: number;
+}
+
+interface DivisionComparisonChartProps {
+  data: DivisionData[];
+}
+
+const DivisionComparisonChart: React.FC<DivisionComparisonChartProps> = ({
+  data,
+}) => {
   return (
     <div className="bg-white p-4 rounded shadow-sm">
       <h3 className="text-lg font-medium mb-3 text-gray-700">
@@ -51,8 +63,9 @@ const DivisionComparisonChart = ({ data }) => {
             />
             <Tooltip
               formatter={(value, name) => {
-                if (name === "avgPayroll") return `$${value.toFixed(1)}M`;
-                return value.toFixed(1);
+                if (name === "avgPayroll")
+                  return `$${(value as number).toFixed(1)}M`;
+                return (value as number).toFixed(1);
               }}
               labelFormatter={(value) => `${value}`}
               contentStyle={{ backgroundColor: "#fff", borderColor: "#ddd" }}
