@@ -1,18 +1,17 @@
-// src/components/MLBSpendingDashboard.tsx
 "use client";
 
 import React, { useState } from "react";
 import { TeamCode } from "@/types/mlb";
-import TabSelector from "./common/TabSelector";
-import DashboardHeader from "./common/DashboardHeader";
-import DashboardFooter from "./common/DashboardFooter";
-import LoadingIndicator from "./common/LoadingIndicator";
-import OverviewTab from "./overviewTab/OverviewTab";
-import EfficiencyTab from "./efficiencyTab/EfficiencyTab";
-import TeamDetailsTab from "./teamDetailsTab/TeamDetailsTab";
+import TabSelector from "@/components/common/TabSelector";
+import DashboardHeader from "@/components/common/DashboardHeader";
+import DashboardFooter from "@/components/common/DashboardFooter";
+import LoadingIndicator from "@/components/common/LoadingIndicator";
+import OverviewTab from "@/components/overviewTab/OverviewTab";
+import EfficiencyTab from "@/components/efficiencyTab/EfficiencyTab";
+import TeamDetailsTab from "@/components/teamDetailsTab/TeamDetailsTab";
 import useMLBData from "@/hooks/useMLBData";
 
-const MLBSpendingDashboard: React.FC = () => {
+const DashboardContent: React.FC = () => {
   const [selectedTeam, setSelectedTeam] = useState<TeamCode | null>(null);
   const { data, summaryData, yearlyData, isLoading } = useMLBData();
 
@@ -45,4 +44,4 @@ const MLBSpendingDashboard: React.FC = () => {
   );
 };
 
-export default MLBSpendingDashboard;
+export default DashboardContent;

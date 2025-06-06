@@ -1,5 +1,6 @@
 "use client";
 import React from "react";
+import Image from "next/image";
 import { getTeamColor, getTeamLogo } from "@/utils/teamColors";
 import { TeamCode } from "@/types/mlb";
 
@@ -14,7 +15,13 @@ const TeamLogo: React.FC<TeamLogoProps> = ({ teamCode }) => {
       style={{ backgroundColor: getTeamColor(teamCode) }}
     >
       <div className="w-10 h-10 rounded-full bg-white flex items-center justify-center">
-        <img alt={`${teamCode} logo`} className="w-9 h-9 object-contain" />
+        <Image
+          src={getTeamLogo(teamCode)}
+          alt={`${teamCode} logo`}
+          width={36}
+          height={36}
+          className="object-contain"
+        />
       </div>
     </div>
   );

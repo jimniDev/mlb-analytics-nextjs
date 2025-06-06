@@ -1,6 +1,6 @@
 // src/app/page.tsx
-import MLBSpendingDashboard from "@/components/MLBSpendingDashboard";
+import { redirect } from "next/navigation";
 
 export default function Home() {
-  return <MLBSpendingDashboard />;
+  redirect("/overview");
 }

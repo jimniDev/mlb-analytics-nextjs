@@ -1,47 +1,43 @@
 "use client";
 import React from "react";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
 
-interface TabSelectorProps {
-  activeTab: string;
-  setActiveTab: (tab: string) => void;
-}
+const TabSelector: React.FC = () => {
+  const pathname = usePathname();
 
-const TabSelector: React.FC<TabSelectorProps> = ({
-  activeTab,
-  setActiveTab,
-}) => {
   return (
     <div className="tab-selector mb-6 md:mb-0">
-      <button
+      <Link
+        href="/overview"
         className={`px-4 py-2 mr-2 rounded ${
-          activeTab === "overview"
+          pathname === "/overview" || pathname === "/"
             ? "bg-[#041E42] text-white"
             : "bg-gray-50 text-gray-700"
         }`}
-        onClick={() => setActiveTab("overview")}
       >
         Overview
-      </button>
-      <button
+      </Link>
+      <Link
+        href="/efficiency"
         className={`px-4 py-2 mr-2 rounded ${
-          activeTab === "efficiency"
+          pathname === "/efficiency"
             ? "bg-[#041E42] text-white"
             : "bg-gray-50 text-gray-700"
         }`}
-        onClick={() => setActiveTab("efficiency")}
       >
         Efficiency Analysis
-      </button>
-      <button
+      </Link>
+      <Link
+        href="/team-details"
         className={`px-4 py-2 rounded ${
-          activeTab === "team"
+          pathname === "/team-details"
             ? "bg-[#041E42] text-white"
             : "bg-gray-50 text-gray-700"
         }`}
-        onClick={() => setActiveTab("team")}
       >
         Team Details
-      </button>
+      </Link>
     </div>
   );
 };

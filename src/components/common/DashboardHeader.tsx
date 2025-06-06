@@ -2,17 +2,11 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import TabSelector from "./TabSelector";
+import { usePathname } from "next/navigation";
 
-interface DashboardHeaderProps {
-  activeTab: string;
-  setActiveTab: (tab: string) => void;
-}
-
-const DashboardHeader: React.FC<DashboardHeaderProps> = ({
-  activeTab,
-  setActiveTab,
-}) => {
+const DashboardHeader: React.FC = () => {
   const [scrolled, setScrolled] = useState<boolean>(false);
+  const pathname = usePathname();
 
   useEffect(() => {
     // Use a throttled scroll handler for better performance
@@ -72,10 +66,7 @@ const DashboardHeader: React.FC<DashboardHeaderProps> = ({
             {/* Always show the tab selector in the minimized header */}
             <div className="flex justify-center w-full md:w-auto">
               <div className="scale-90 transform origin-center">
-                <TabSelector
-                  activeTab={activeTab}
-                  setActiveTab={setActiveTab}
-                />
+                <TabSelector />
               </div>
             </div>
           </div>
