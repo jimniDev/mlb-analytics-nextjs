@@ -14,8 +14,25 @@ import {
   Cell,
   LabelList,
 } from "recharts";
+import { TeamCode } from "@/types/mlb";
 
-const PerformanceMatrixChart = ({
+interface TeamData {
+  team: string;
+  teamCode: TeamCode;
+  avgPayroll: number;
+  avgWins: number;
+  avgCostPerWin: number;
+  postseasonAppearances: number;
+  worldSeriesWins: number;
+}
+
+interface PerformanceMatrixChartProps {
+  filteredData: TeamData[];
+  avgLeaguePayroll: number;
+  avgLeagueWins: number;
+}
+
+const PerformanceMatrixChart: React.FC<PerformanceMatrixChartProps> = ({
   filteredData,
   avgLeaguePayroll,
   avgLeagueWins,
@@ -65,8 +82,8 @@ const PerformanceMatrixChart = ({
             <Tooltip
               formatter={(value, name) => {
                 if (name === "Average Payroll")
-                  return `$${(value / 1000000).toFixed(1)}M`;
-                return value.toFixed(1);
+                  return `$${((value as number) / 1000000).toFixed(1)}M`;
+                return (value as number).toFixed(1);
               }}
               labelFormatter={(_, payload) => {
                 if (payload && payload.length) {

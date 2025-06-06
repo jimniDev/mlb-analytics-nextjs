@@ -2,8 +2,23 @@
 "use client";
 import React from "react";
 import { getTeamLogo } from "@/utils/teamColors";
+import { TeamCode } from "@/types/mlb";
 
-const EfficiencyStats = ({
+interface Team {
+  team: string;
+  teamCode: TeamCode;
+  avgCostPerWin: number;
+  avgWins: number;
+}
+
+interface EfficiencyStatsProps {
+  avgLeaguePayroll: number;
+  avgLeagueWins: number;
+  avgLeagueCostPerWin: number;
+  sortedTeams: Team[];
+}
+
+const EfficiencyStats: React.FC<EfficiencyStatsProps> = ({
   avgLeaguePayroll,
   avgLeagueWins,
   avgLeagueCostPerWin,

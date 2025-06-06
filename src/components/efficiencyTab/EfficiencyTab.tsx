@@ -1,11 +1,24 @@
 // src/components/EfficiencyTab/EfficiencyTab.jsx
 "use client";
-import React, { useState } from "react";
+import React from "react";
 import EfficiencyChartsContainer from "./EfficiencyChartsContainer";
 import TableauViz from "../common/TableauViz";
 import _ from "lodash";
 
-const EfficiencyTab = ({ summaryData, data }) => {
+interface TeamSummary {
+  // Add more fields as needed
+  league: string;
+  avgCostPerWin: number;
+  avgPayroll: number;
+  avgWins: number;
+}
+
+interface EfficiencyTabProps {
+  summaryData: TeamSummary[];
+  data: any;
+}
+
+const EfficiencyTab: React.FC<EfficiencyTabProps> = ({ summaryData, data }) => {
   return (
     <div className="grid gap-6">
       <TableauViz

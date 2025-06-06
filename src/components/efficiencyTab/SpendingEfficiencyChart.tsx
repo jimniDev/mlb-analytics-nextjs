@@ -13,8 +13,24 @@ import {
   ReferenceLine,
 } from "recharts";
 import { getTeamLogo } from "@/utils/teamColors";
+import { TeamCode } from "@/types/mlb";
 
-const SpendingEfficiencyChart = ({ sortedTeams, avgLeagueCostPerWin }) => {
+interface TeamData {
+  team: string;
+  teamCode: TeamCode;
+  avgCostPerWin: number;
+  avgWins: number;
+}
+
+interface SpendingEfficiencyChartProps {
+  sortedTeams: TeamData[];
+  avgLeagueCostPerWin: number;
+}
+
+const SpendingEfficiencyChart: React.FC<SpendingEfficiencyChartProps> = ({
+  sortedTeams,
+  avgLeagueCostPerWin,
+}) => {
   // Enhance the data to include win information
   const enhancedData = sortedTeams.map((team) => ({
     ...team,
@@ -23,24 +39,32 @@ const SpendingEfficiencyChart = ({ sortedTeams, avgLeagueCostPerWin }) => {
   }));
 
   // Custom tooltip to format exactly as requested
-  const CustomTooltip = ({ active, payload, label }) => {
+  const CustomTooltip = ({ active, payload, label }: any) => {
     if (active && payload && payload.length) {
       const team = enhancedData.find((item) => item.displayName === label);
 
       return (
         <div className="custom-tooltip bg-white p-3 border border-gray-200 shadow-sm rounded">
           <div className="flex items-center mb-1">
-            <img
-              src={getTeamLogo(team?.teamCode)}
-              alt={`${team?.team} logo`}
-              className="w-6 h-6 object-contain mr-2"
-            />
-            <p className="font-bold">{team?.team}</p>
+            {team && (
+              <>
+                <img
+                  src={getTeamLogo(team.teamCode)}
+                  alt={`${team.team} logo`}
+                  className="w-6 h-6 object-contain mr-2"
+                />
+                <p className="font-bold">{team.team}</p>
+              </>
+            )}
           </div>
-          <p className="text-sm">
-            Cost per win: ${(team?.avgCostPerWin / 1000000).toFixed(2)}M
-          </p>
-          <p className="text-sm">{Math.round(team?.avgWins)} wins/season</p>
+          {team && (
+            <>
+              <p className="text-sm">
+                Cost per win: ${(team.avgCostPerWin / 1000000).toFixed(2)}M
+              </p>
+              <p className="text-sm">{Math.round(team.avgWins)} wins/season</p>
+            </>
+          )}
         </div>
       );
     }

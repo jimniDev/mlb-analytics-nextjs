@@ -4,10 +4,26 @@ import React, { useState } from "react";
 import SpendingEfficiencyChart from "./SpendingEfficiencyChart";
 import EfficiencyStats from "./EfficiencyStats";
 import _ from "lodash";
+import { TeamCode } from "@/types/mlb";
 
-const EfficiencyChartsContainer = ({ summaryData }) => {
+interface TeamSummary {
+  team: string;
+  teamCode: TeamCode;
+  league: string;
+  avgCostPerWin: number;
+  avgPayroll: number;
+  avgWins: number;
+}
+
+interface EfficiencyChartsContainerProps {
+  summaryData: TeamSummary[];
+}
+
+const EfficiencyChartsContainer: React.FC<EfficiencyChartsContainerProps> = ({
+  summaryData,
+}) => {
   // Local filter for the two components we want to control together
-  const [leagueFilter, setLeagueFilter] = useState("All");
+  const [leagueFilter, setLeagueFilter] = useState<string>("All");
 
   // Filter by league if needed
   const filteredData =

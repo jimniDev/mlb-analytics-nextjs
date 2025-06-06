@@ -2,7 +2,17 @@
 "use client";
 import React from "react";
 
-const LeagueFilter = ({ leagueFilter, setLeagueFilter, filteredCount }) => {
+interface LeagueFilterProps {
+  leagueFilter: string;
+  setLeagueFilter: (league: string) => void;
+  filteredCount: number;
+}
+
+const LeagueFilter: React.FC<LeagueFilterProps> = ({
+  leagueFilter,
+  setLeagueFilter,
+  filteredCount,
+}) => {
   return (
     <div className="flex justify-between items-center">
       <div className="flex space-x-2">
