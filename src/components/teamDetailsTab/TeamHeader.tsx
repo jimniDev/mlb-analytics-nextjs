@@ -3,8 +3,25 @@
 import React from "react";
 import TeamLogo from "../common/TeamLogo";
 import { getTeamColor } from "@/utils/teamColors";
+import { TeamCode } from "@/types/mlb";
 
-const TeamHeader = ({ teamData }) => {
+interface TeamData {
+  team: string;
+  teamCode: TeamCode;
+  league: string;
+  division: string;
+  avgPayroll: number;
+  avgWins: number;
+  avgCostPerWin: number;
+  postseasonAppearances: number;
+  worldSeriesWins: number;
+}
+
+interface TeamHeaderProps {
+  teamData: TeamData;
+}
+
+const TeamHeader: React.FC<TeamHeaderProps> = ({ teamData }) => {
   return (
     <div className="bg-white p-6 rounded shadow-sm mb-6">
       <div className="flex items-center mb-4">

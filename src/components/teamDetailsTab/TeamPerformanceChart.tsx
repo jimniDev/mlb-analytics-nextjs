@@ -12,8 +12,26 @@ import {
   ResponsiveContainer,
 } from "recharts";
 import { getTeamColor } from "@/utils/teamColors";
+import { TeamCode } from "@/types/mlb";
 
-const TeamPerformanceChart = ({ teamData }) => {
+interface PayrollHistory {
+  year: number;
+  payroll: number;
+  wins: number;
+}
+
+interface TeamData {
+  teamCode: TeamCode;
+  payrollHistory: PayrollHistory[];
+}
+
+interface TeamPerformanceChartProps {
+  teamData: TeamData;
+}
+
+const TeamPerformanceChart: React.FC<TeamPerformanceChartProps> = ({
+  teamData,
+}) => {
   return (
     <div className="bg-white p-4 rounded shadow-sm">
       <h3 className="text-lg font-medium mb-3 text-gray-700">
@@ -55,7 +73,7 @@ const TeamPerformanceChart = ({ teamData }) => {
               domain={[0, 110]}
             />
             <Tooltip
-              formatter={(value, name) => {
+              formatter={(value: number, name: string) => {
                 if (name === "Payroll") return `${value.toFixed(1)}M`;
                 if (name === "Cost per Win") return `${value.toFixed(2)}M`;
                 return value;

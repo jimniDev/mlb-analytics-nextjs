@@ -7,8 +7,41 @@ import TeamPerformanceChart from "./TeamPerformanceChart";
 import TeamEfficiencyChart from "./TeamEfficiencyChart";
 import SpendingRankChart from "./SpendingRankChart";
 import EfficiencySummary from "./EfficiencySummary";
+import { TeamCode } from "@/types/mlb";
 
-const TeamDetailsTab = ({
+interface TeamData {
+  team: string;
+  teamCode: TeamCode;
+  league: string;
+  division: string;
+  latestYear: number;
+  latestPayroll: number;
+  latestWins: number;
+  latestCostPerWin: number;
+  avgPayroll: number;
+  avgWins: number;
+  avgCostPerWin: number;
+  postseasonAppearances: number;
+  worldSeriesWins: number;
+  avgOPS: number;
+  avgERA: number;
+  payrollHistory: {
+    year: number;
+    payroll: number;
+    wins: number;
+    costPerWin: number;
+    madePostseason: boolean;
+  }[];
+}
+
+interface TeamDetailsTabProps {
+  summaryData: TeamData[];
+  selectedTeam: TeamCode | null;
+  setSelectedTeam: (team: TeamCode) => void;
+  data: any; // TODO: Define proper type for data
+}
+
+const TeamDetailsTab: React.FC<TeamDetailsTabProps> = ({
   summaryData,
   selectedTeam,
   setSelectedTeam,
