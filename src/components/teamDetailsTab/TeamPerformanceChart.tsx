@@ -12,21 +12,10 @@ import {
   ResponsiveContainer,
 } from "recharts";
 import { getTeamColor } from "@/utils/teamColors";
-import { TeamCode } from "@/types/mlb";
-
-interface PayrollHistory {
-  year: number;
-  payroll: number;
-  wins: number;
-}
-
-interface TeamData {
-  teamCode: TeamCode;
-  payrollHistory: PayrollHistory[];
-}
+import { TeamSummary } from "@/types/mlb";
 
 interface TeamPerformanceChartProps {
-  teamData: TeamData;
+  teamData: TeamSummary;
 }
 
 const TeamPerformanceChart: React.FC<TeamPerformanceChartProps> = ({
@@ -34,69 +23,38 @@ const TeamPerformanceChart: React.FC<TeamPerformanceChartProps> = ({
 }) => {
   return (
     <div className="bg-white p-4 rounded shadow-sm">
-      <h3 className="text-lg font-medium mb-3 text-gray-700">
-        Payroll & Performance (2021-2024)
+      <h3 className="text-lg font-medium mb-4 text-gray-700">
+        Performance Over Time
       </h3>
-      <div className="h-64">
-        <ResponsiveContainer width="100%" height="100%">
-          <LineChart
-            data={teamData.payrollHistory}
-            margin={{ top: 5, right: 30, left: 20, bottom: 5 }}
-          >
-            <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
-            <XAxis
-              dataKey="year"
-              tickFormatter={(value) => value.toString()}
-              stroke="#666"
-            />
-            <YAxis
-              yAxisId="left"
-              tickFormatter={(value) => `${value}M`}
-              stroke="#666"
-              label={{
-                value: "Payroll ($)",
-                angle: -90,
-                position: "insideLeft",
-                fill: "#666",
-              }}
-            />
-            <YAxis
-              yAxisId="right"
-              orientation="right"
-              stroke="#666"
-              label={{
-                value: "Wins",
-                angle: 90,
-                position: "insideRight",
-                fill: "#666",
-              }}
-              domain={[0, 110]}
-            />
+      <div style={{ width: "100%", height: 400 }}>
+        <ResponsiveContainer>
+          <LineChart data={teamData.payrollHistory}>
+            <CartesianGrid strokeDasharray="3 3" />
+            <XAxis dataKey="year" />
+            <YAxis yAxisId="left" />
+            <YAxis yAxisId="right" orientation="right" />
             <Tooltip
-              formatter={(value: number, name: string) => {
-                if (name === "Payroll") return `${value.toFixed(1)}M`;
-                if (name === "Cost per Win") return `${value.toFixed(2)}M`;
-                return value;
-              }}
-              contentStyle={{ backgroundColor: "#fff", borderColor: "#ddd" }}
+              formatter={(value: number, name: string) => [
+                name === "payroll"
+                  ? `$${(value / 1000000).toFixed(1)}M`
+                  : value,
+                name === "payroll" ? "Payroll" : "Wins",
+              ]}
             />
             <Legend />
             <Line
               yAxisId="left"
               type="monotone"
               dataKey="payroll"
+              stroke="#8884d8"
               name="Payroll"
-              stroke={getTeamColor(teamData.teamCode)}
-              strokeWidth={2}
-              activeDot={{ r: 8 }}
             />
             <Line
               yAxisId="right"
               type="monotone"
               dataKey="wins"
+              stroke="#82ca9d"
               name="Wins"
-              stroke="#4e79a7"
-              strokeWidth={2}
             />
           </LineChart>
         </ResponsiveContainer>

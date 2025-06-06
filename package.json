@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@tableau/embedding-api": "^3.13.0",
     "@types/lodash": "^4.17.17",
     "lodash": "^4.17.21",
     "next": "15.3.3",
@@ -22,6 +23,7 @@
     "@types/node": "^20.17.57",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "@types/tableau": "^2.2.8",
     "eslint": "^9",
     "eslint-config-next": "15.3.3",
     "tailwindcss": "^4",

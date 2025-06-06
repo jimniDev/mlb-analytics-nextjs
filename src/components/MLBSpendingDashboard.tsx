@@ -2,6 +2,7 @@
 "use client";
 
 import React, { useState } from "react";
+import { TeamCode } from "@/types/mlb";
 import TabSelector from "./common/TabSelector";
 import DashboardHeader from "./common/DashboardHeader";
 import DashboardFooter from "./common/DashboardFooter";
@@ -13,7 +14,7 @@ import useMLBData from "@/hooks/useMLBData";
 
 const MLBSpendingDashboard: React.FC = () => {
   const [activeTab, setActiveTab] = useState("overview");
-  const [selectedTeam, setSelectedTeam] = useState<string | null>(null);
+  const [selectedTeam, setSelectedTeam] = useState<TeamCode | null>(null);
 
   const { data, summaryData, yearlyData, isLoading } = useMLBData();
 

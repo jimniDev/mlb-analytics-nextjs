@@ -4,16 +4,17 @@ import React, { useState } from "react";
 import SpendingEfficiencyChart from "./SpendingEfficiencyChart";
 import EfficiencyStats from "./EfficiencyStats";
 import _ from "lodash";
-import { TeamCode } from "@/types/mlb";
-
-interface TeamSummary {
-  team: string;
-  teamCode: TeamCode;
-  league: string;
-  avgCostPerWin: number;
-  avgPayroll: number;
-  avgWins: number;
-}
+import { TeamSummary } from "@/types/mlb";
+import {
+  BarChart,
+  Bar,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  Legend,
+  ResponsiveContainer,
+} from "recharts";
 
 interface EfficiencyChartsContainerProps {
   summaryData: TeamSummary[];
@@ -40,6 +41,26 @@ const EfficiencyChartsContainer: React.FC<EfficiencyChartsContainerProps> = ({
   const avgLeaguePayroll = _.meanBy(filteredData, "avgPayroll") / 1000000;
   const avgLeagueWins = _.meanBy(filteredData, "avgWins");
   const avgLeagueCostPerWin = _.meanBy(filteredData, "avgCostPerWin") / 1000000;
+
+  const leagueData = _.chain(summaryData)
+    .groupBy("league")
+    .map((teams: TeamSummary[], league: string) => ({
+      league,
+      avgCostPerWin: _.meanBy(teams, "avgCostPerWin"),
+      avgPayroll: _.meanBy(teams, "avgPayroll"),
+      avgWins: _.meanBy(teams, "avgWins"),
+    }))
+    .value();
+
+  const divisionData = _.chain(summaryData)
+    .groupBy("division")
+    .map((teams: TeamSummary[], division: string) => ({
+      division,
+      avgCostPerWin: _.meanBy(teams, "avgCostPerWin"),
+      avgPayroll: _.meanBy(teams, "avgPayroll"),
+      avgWins: _.meanBy(teams, "avgWins"),
+    }))
+    .value();
 
   return (
     <div className="bg-white p-4 rounded shadow-sm">

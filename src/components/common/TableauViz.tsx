@@ -1,6 +1,7 @@
-// src/components/common/TableauViz.jsx
+// src/components/common/TableauViz.tsx
 "use client";
-import React, { useEffect, useRef } from "react";
+import React from "react";
+import dynamic from "next/dynamic";
 
 interface TableauVizProps {
   vizUrl: string;
@@ -9,106 +10,37 @@ interface TableauVizProps {
   hideTabs?: boolean;
   hideToolbar?: boolean;
   className?: string;
-  filters?: Record<string, string>;
+  filters?: Record<string, any>;
 }
 
-declare global {
-  interface Window {
-    tableau: {
-      Viz: new (containerDiv: HTMLElement, url: string, options: any) => any;
-      FilterUpdateType: {
-        REPLACE: string;
-      };
-    };
-  }
-}
-
-const TableauViz: React.FC<TableauVizProps> = ({
-  vizUrl,
-  title,
-  height = 600,
-  hideTabs = true,
-  hideToolbar = true,
-  className = "",
-  filters = {},
-}) => {
-  const vizRef = useRef<HTMLDivElement>(null);
-  const vizInstance = useRef<any>(null);
-
-  useEffect(() => {
-    // Only proceed if we have the tableau API available
-    if (!window.tableau || !vizRef.current) return;
-
-    // Function to initialize or re-initialize the viz
-    const initViz = () => {
-      // Clean up existing viz if it exists
-      if (vizInstance.current) {
-        vizInstance.current.dispose();
-      }
-
-      // Clear the container
-      while (vizRef.current?.firstChild) {
-        vizRef.current.removeChild(vizRef.current.firstChild);
-      }
-
-      // Options for the visualization
-      const options = {
-        hideTabs: hideTabs,
-        hideToolbar: hideToolbar,
-        width: "100%",
-        height: `${height}px`,
-        onFirstInteractive: function () {
-          // Apply any filters once the viz is interactive
-          const viz = vizInstance.current;
-          const workbook = viz.getWorkbook();
-          const activeSheet = workbook.getActiveSheet();
-
-          // Apply filters if any are provided
-          if (Object.keys(filters).length > 0) {
-            Object.entries(filters).forEach(([field, value]) => {
-              activeSheet.applyFilterAsync(
-                field,
-                value,
-                window.tableau.FilterUpdateType.REPLACE
-              );
-            });
-          }
-        },
-      };
-
-      // Create the new viz
-      if (vizRef.current) {
-        vizInstance.current = new window.tableau.Viz(
-          vizRef.current,
-          vizUrl,
-          options
-        );
-      }
-    };
-
-    // Initialize the visualization
-    initViz();
-
-    // Clean up when the component unmounts
-    return () => {
-      if (vizInstance.current) {
-        vizInstance.current.dispose();
-      }
-    };
-  }, [vizUrl, height, hideTabs, hideToolbar, filters]);
-
-  return (
-    <div className={`bg-white p-4 rounded shadow-sm ${className}`}>
-      {title && (
-        <h3 className="text-lg font-medium mb-3 text-gray-700">{title}</h3>
-      )}
-      <div
-        ref={vizRef}
-        className="w-full overflow-hidden"
-        style={{ height: `${height}px` }}
-      ></div>
+// 로딩 컴포넌트
+const LoadingComponent = ({ height = 600 }: { height?: number }) => (
+  <div className="bg-white p-4 rounded shadow-sm">
+    <div
+      className="flex items-center justify-center bg-gray-50 rounded"
+      style={{ height: `${height}px` }}
+    >
+      <div className="text-center">
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto"></div>
+        <p className="mt-2 text-sm text-gray-600">
+          Loading Tableau visualization...
+        </p>
+      </div>
     </div>
-  );
+  </div>
+);
+
+// Dynamic import로 클라이언트에서만 로드
+const TableauVizClient = dynamic(
+  () => import("@/components/common/TableauVizClient"),
+  {
+    ssr: false,
+    loading: () => <LoadingComponent />,
+  }
+);
+
+const TableauViz: React.FC<TableauVizProps> = (props) => {
+  return <TableauVizClient {...props} />;
 };
 
 export default TableauViz;

@@ -57,7 +57,7 @@ export interface ProcessedMLBData extends MLBTeamData {
 
 export interface TeamSummary {
   team: string;
-  teamCode: string;
+  teamCode: TeamCode;
   league: "AL" | "NL";
   division: string;
   latestYear: number;

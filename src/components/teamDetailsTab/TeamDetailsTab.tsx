@@ -7,7 +7,7 @@ import TeamPerformanceChart from "./TeamPerformanceChart";
 import TeamEfficiencyChart from "./TeamEfficiencyChart";
 import SpendingRankChart from "./SpendingRankChart";
 import EfficiencySummary from "./EfficiencySummary";
-import { TeamCode } from "@/types/mlb";
+import { TeamSummary, TeamCode } from "@/types/mlb";
 
 interface TeamData {
   team: string;
@@ -35,9 +35,9 @@ interface TeamData {
 }
 
 interface TeamDetailsTabProps {
-  summaryData: TeamData[];
+  summaryData: TeamSummary[];
   selectedTeam: TeamCode | null;
-  setSelectedTeam: (team: TeamCode) => void;
+  setSelectedTeam: (team: TeamCode | null) => void;
   data: any; // TODO: Define proper type for data
 }
 
@@ -47,9 +47,9 @@ const TeamDetailsTab: React.FC<TeamDetailsTabProps> = ({
   setSelectedTeam,
   data,
 }) => {
-  const selectedTeamData = selectedTeam
-    ? summaryData.find((team) => team.teamCode === selectedTeam)
-    : null;
+  const selectedTeamData = summaryData.find(
+    (team) => team.teamCode === selectedTeam
+  );
 
   return (
     <div className="space-y-6">
@@ -59,7 +59,7 @@ const TeamDetailsTab: React.FC<TeamDetailsTabProps> = ({
         setSelectedTeam={setSelectedTeam}
       />
 
-      {selectedTeamData ? (
+      {selectedTeamData && (
         <div>
           <TeamHeader teamData={selectedTeamData} />
 
@@ -71,18 +71,8 @@ const TeamDetailsTab: React.FC<TeamDetailsTabProps> = ({
               teamData={selectedTeamData}
               summaryData={summaryData}
             />
+            {/* <TeamPayrollChart teamData={selectedTeamData} /> */}
           </div>
-        </div>
-      ) : (
-        <div className="text-center text-gray-500 bg-white p-12 rounded shadow-sm">
-          <p className="text-xl mb-4">
-            Please select a team to view detailed information
-          </p>
-          <p>
-            The team details dashboard provides in-depth analysis of spending
-            patterns, efficiency metrics, and performance outcomes for
-            individual teams.
-          </p>
         </div>
       )}
     </div>

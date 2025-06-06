@@ -4,14 +4,7 @@ import React from "react";
 import EfficiencyChartsContainer from "./EfficiencyChartsContainer";
 import TableauViz from "../common/TableauViz";
 import _ from "lodash";
-
-interface TeamSummary {
-  // Add more fields as needed
-  league: string;
-  avgCostPerWin: number;
-  avgPayroll: number;
-  avgWins: number;
-}
+import { TeamSummary } from "@/types/mlb";
 
 interface EfficiencyTabProps {
   summaryData: TeamSummary[];
