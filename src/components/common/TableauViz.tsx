@@ -1,9 +1,29 @@
 // src/components/common/TableauViz.jsx
 "use client";
 import React, { useEffect, useRef } from "react";
-import PropTypes from "prop-types";
 
-const TableauViz = ({
+interface TableauVizProps {
+  vizUrl: string;
+  title?: string;
+  height?: number;
+  hideTabs?: boolean;
+  hideToolbar?: boolean;
+  className?: string;
+  filters?: Record<string, string>;
+}
+
+declare global {
+  interface Window {
+    tableau: {
+      Viz: new (containerDiv: HTMLElement, url: string, options: any) => any;
+      FilterUpdateType: {
+        REPLACE: string;
+      };
+    };
+  }
+}
+
+const TableauViz: React.FC<TableauVizProps> = ({
   vizUrl,
   title,
   height = 600,
@@ -12,8 +32,8 @@ const TableauViz = ({
   className = "",
   filters = {},
 }) => {
-  const vizRef = useRef(null);
-  const vizInstance = useRef(null);
+  const vizRef = useRef<HTMLDivElement>(null);
+  const vizInstance = useRef<any>(null);
 
   useEffect(() => {
     // Only proceed if we have the tableau API available
@@ -27,7 +47,7 @@ const TableauViz = ({
       }
 
       // Clear the container
-      while (vizRef.current.firstChild) {
+      while (vizRef.current?.firstChild) {
         vizRef.current.removeChild(vizRef.current.firstChild);
       }
 
@@ -57,11 +77,13 @@ const TableauViz = ({
       };
 
       // Create the new viz
-      vizInstance.current = new window.tableau.Viz(
-        vizRef.current,
-        vizUrl,
-        options
-      );
+      if (vizRef.current) {
+        vizInstance.current = new window.tableau.Viz(
+          vizRef.current,
+          vizUrl,
+          options
+        );
+      }
     };
 
     // Initialize the visualization
@@ -87,16 +109,6 @@ const TableauViz = ({
       ></div>
     </div>
   );
-};
-
-TableauViz.propTypes = {
-  vizUrl: PropTypes.string.isRequired,
-  title: PropTypes.string,
-  height: PropTypes.number,
-  hideTabs: PropTypes.bool,
-  hideToolbar: PropTypes.bool,
-  className: PropTypes.string,
-  filters: PropTypes.object,
 };
 
 export default TableauViz;
