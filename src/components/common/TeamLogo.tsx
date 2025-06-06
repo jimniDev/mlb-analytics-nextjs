@@ -1,15 +1,20 @@
 "use client";
 import React from "react";
 import { getTeamColor, getTeamLogo } from "@/utils/teamColors";
+import { TeamCode } from "@/types/mlb";
 
-const TeamLogo = ({ teamCode }) => {
+interface TeamLogoProps {
+  teamCode: TeamCode;
+}
+
+const TeamLogo: React.FC<TeamLogoProps> = ({ teamCode }) => {
   return (
     <div
       className="w-12 h-12 rounded-full flex items-center justify-center overflow-hidden"
       style={{ backgroundColor: getTeamColor(teamCode) }}
     >
       <div className="w-10 h-10 rounded-full bg-white flex items-center justify-center">
-        <img alt={`${tesamCode} logo`} className="w-9 h-9 object-contain" />
+        <img alt={`${teamCode} logo`} className="w-9 h-9 object-contain" />
       </div>
     </div>
   );

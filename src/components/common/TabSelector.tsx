@@ -1,7 +1,15 @@
 "use client";
 import React from "react";
 
-const TabSelector = ({ activeTab, setActiveTab }) => {
+interface TabSelectorProps {
+  activeTab: string;
+  setActiveTab: (tab: string) => void;
+}
+
+const TabSelector: React.FC<TabSelectorProps> = ({
+  activeTab,
+  setActiveTab,
+}) => {
   return (
     <div className="tab-selector mb-6 md:mb-0">
       <button
